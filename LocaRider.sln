@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocaRider.API", "LocaRider.API\LocaRider.API.csproj", "{4EEED380-E0AA-42BD-8084-131EA58246B2}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Infrastructure", "4 - Infrastructure", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - API", "1 - API", "{5F5152C6-2A53-463A-B2BF-DDA68ED0B708}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2- Application", "2- Application", "{E9D5E2A3-3EEF-4F23-8CAA-2B2E052C475E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Domain", "3 - Domain", "{C980D02B-5E01-41DE-98A5-8F28D0785CD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocaRider.Application", "LocaRider.Application\LocaRider.Application.csproj", "{DF322335-A4CE-4D57-93E1-0000D1923FA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocaRider.Domain", "LocaRider.Domain\LocaRider.Domain.csproj", "{64DC8FEE-59E0-4678-9F06-25ED2801560C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocaRider.Infrastructure", "LocaRider.Infrastructure\LocaRider.Infrastructure.csproj", "{1B8A44E7-9CEB-0DBE-1BB3-E5D4DDF05A1B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4EEED380-E0AA-42BD-8084-131EA58246B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EEED380-E0AA-42BD-8084-131EA58246B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EEED380-E0AA-42BD-8084-131EA58246B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EEED380-E0AA-42BD-8084-131EA58246B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF322335-A4CE-4D57-93E1-0000D1923FA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF322335-A4CE-4D57-93E1-0000D1923FA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF322335-A4CE-4D57-93E1-0000D1923FA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF322335-A4CE-4D57-93E1-0000D1923FA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64DC8FEE-59E0-4678-9F06-25ED2801560C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64DC8FEE-59E0-4678-9F06-25ED2801560C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64DC8FEE-59E0-4678-9F06-25ED2801560C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64DC8FEE-59E0-4678-9F06-25ED2801560C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B8A44E7-9CEB-0DBE-1BB3-E5D4DDF05A1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B8A44E7-9CEB-0DBE-1BB3-E5D4DDF05A1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B8A44E7-9CEB-0DBE-1BB3-E5D4DDF05A1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B8A44E7-9CEB-0DBE-1BB3-E5D4DDF05A1B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4EEED380-E0AA-42BD-8084-131EA58246B2} = {5F5152C6-2A53-463A-B2BF-DDA68ED0B708}
+		{DF322335-A4CE-4D57-93E1-0000D1923FA1} = {E9D5E2A3-3EEF-4F23-8CAA-2B2E052C475E}
+		{64DC8FEE-59E0-4678-9F06-25ED2801560C} = {C980D02B-5E01-41DE-98A5-8F28D0785CD0}
+		{1B8A44E7-9CEB-0DBE-1BB3-E5D4DDF05A1B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {005F1FE8-16FC-4BB5-BF14-55B819457322}
+	EndGlobalSection
+EndGlobal

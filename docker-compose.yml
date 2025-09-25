@@ -1,0 +1,56 @@
+services:
+  locarider.api:
+    build:
+      context: .
+      dockerfile: LocaRider.API/Dockerfile
+    container_name: locarider_api
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    volumes:
+      - ${USERPROFILE}/Desktop/Fotos:/app/photos
+    depends_on:
+      - postgres
+      - mongodb
+    environment:
+      - ConnectionStrings__Postgres=Host=postgres;Database=locariderdb;Username=locauser;Password=locapass
+      - ConnectionStrings__Mongo=mongodb://locauser:locapass@mongodb:27017/locariderdb
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - locarider_network
+
+  postgres:
+    image: postgres:15
+    container_name: locarider_postgres
+    environment:
+      - POSTGRES_USER=locauser
+      - POSTGRES_PASSWORD=locapass
+      - POSTGRES_DB=locariderdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - locarider_network
+
+  mongodb:
+    image: mongo:7
+    container_name: locarider_mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=locauser
+      - MONGO_INITDB_ROOT_PASSWORD=locapass
+      - MONGO_INITDB_DATABASE=locariderdb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - locarider_network
+
+networks:
+  locarider_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  mongo_data:
