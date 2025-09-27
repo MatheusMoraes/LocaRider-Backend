@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 
 namespace LocaRider.Application.Services.Drivers
 {
-
     public class DriversService : IDriversService
     {
         private readonly IDriversRepository _driversRepository;
@@ -17,10 +16,10 @@ namespace LocaRider.Application.Services.Drivers
         private readonly ILogger<DriversService> _logger;
 
         public DriversService(
-           IDriversRepository driversRepository,
-           IStoragesService storagesService,
-           IMapper mapper,
-           ILogger<DriversService> logger)
+            IDriversRepository driversRepository,
+            IStoragesService storagesService,
+            IMapper mapper,
+            ILogger<DriversService> logger)
         {
             _driversRepository = driversRepository;
             _storagesService = storagesService;
@@ -37,15 +36,13 @@ namespace LocaRider.Application.Services.Drivers
                 var driver = await _driversRepository.GetByIdAsync(driverId);
                 if (driver is null)
                 {
-                    _logger.LogWarning("Tentativa de atualizar imagem CNH para motorista inexistente: {DriverId}", driverId);
+                    _logger.LogWarning("Motorista inexistente: {DriverId}", driverId);
                     throw new KeyNotFoundException("Motorista não encontrado.");
                 }
 
-                var base64 = driverBase64ImageDTO.imagem_cnh?
-                    .Replace("\r", "")
-                    .Replace("\n", "")
-                    .Trim();
+                _logger.LogInformation("Motorista encontrado: {DriverId}", driverId);
 
+                var base64 = driverBase64ImageDTO.imagem_cnh?.Replace("\r", "").Replace("\n", "").Trim();
                 if (string.IsNullOrWhiteSpace(base64))
                 {
                     _logger.LogWarning("Base64 da CNH está vazio ou nulo para motorista {DriverId}", driverId);
@@ -67,22 +64,12 @@ namespace LocaRider.Application.Services.Drivers
                     throw new InvalidOperationException("A string fornecida não é uma Base64 válida.");
                 }
 
-                string extension;
-                if (fileBytes.Length >= 8 && fileBytes.Take(8).SequenceEqual(new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A }))
-                    extension = ".png";
-                else if (fileBytes.Length >= 2 && fileBytes.Take(2).SequenceEqual(new byte[] { 0x42, 0x4D }))
-                    extension = ".bmp";
-                else
-                {
-                    _logger.LogWarning("Formato inválido de imagem enviado para motorista {DriverId}", driverId);
-                    throw new InvalidOperationException("Formato de imagem inválido. Apenas PNG ou BMP são aceitos.");
-                }
-
+                string extension = DetermineImageExtension(fileBytes, driverId);
                 var fileName = $"{driver.DriverId}{extension}";
-                _logger.LogInformation("Gerando nome de arquivo {FileName} para motorista {DriverId}", fileName, driverId);
+                _logger.LogInformation("Nome de arquivo gerado: {FileName} para motorista {DriverId}", fileName, driverId);
 
                 var relativePath = await _storagesService.SaveAsync(fileName, fileBytes);
-                _logger.LogInformation("Imagem CNH salva em {Path} para motorista {DriverId}", relativePath, driverId);
+                _logger.LogInformation("Imagem CNH salva no storage: {Path} para motorista {DriverId}", relativePath, driverId);
 
                 driver.SetCnhImage(relativePath);
                 await _driversRepository.UpdateAsync(driver);
@@ -104,25 +91,37 @@ namespace LocaRider.Application.Services.Drivers
             try
             {
                 if (await _driversRepository.GetByIdAsync(driverDTO.identificador) is not null)
+                {
+                    _logger.LogWarning("Identificador já existe: {Identificador}", driverDTO.identificador);
                     throw new InvalidOperationException($"Já existe motorista com o identificador {driverDTO.identificador}");
+                }
 
                 if (await _driversRepository.ExistsByCNPJAsync(driverDTO.cnpj))
+                {
+                    _logger.LogWarning("CNPJ já existe: {Cnpj}", driverDTO.cnpj);
                     throw new InvalidOperationException($"Já existe motorista com CNPJ {driverDTO.cnpj}");
+                }
 
                 if (await _driversRepository.ExistsByCNHNumberAsync(driverDTO.numero_cnh))
+                {
+                    _logger.LogWarning("CNH já existe: {Cnh}", driverDTO.numero_cnh);
                     throw new InvalidOperationException($"Já existe motorista com CNH {driverDTO.numero_cnh}");
+                }
 
                 if (driverDTO.imagem_cnh is null)
+                {
+                    _logger.LogWarning("Imagem CNH não fornecida para motorista {Identificador}", driverDTO.identificador);
                     throw new InvalidOperationException("Imagem CNH é obrigatória para cadastro.");
+                }
 
-                var relativePath = await ProcessAndSaveImageAsync(driverDTO.identificador, new DriverBase64ImageDTO { imagem_cnh = driverDTO.imagem_cnh});
+                _logger.LogInformation("Processando imagem CNH para motorista {Identificador}", driverDTO.identificador);
+                var relativePath = await ProcessAndSaveImageAsync(driverDTO.identificador, new DriverBase64ImageDTO { imagem_cnh = driverDTO.imagem_cnh });
 
                 var driverEntity = _mapper.Map<Driver>(driverDTO);
                 driverEntity.SetCnhImage(relativePath);
 
                 var createdDriver = await _driversRepository.AddAsync(driverEntity);
-
-                _logger.LogInformation("Motorista {DriverId} criado com sucesso", createdDriver.DriverId);
+                _logger.LogInformation("Motorista criado com sucesso: {DriverId}", createdDriver.DriverId);
 
                 return _mapper.Map<DriverDTO>(createdDriver);
             }
@@ -137,41 +136,42 @@ namespace LocaRider.Application.Services.Drivers
         {
             try
             {
-                var base64 = imageDTO.imagem_cnh?
-                    .Replace("\r", "")
-                    .Replace("\n", "")
-                    .Trim();
-
+                var base64 = imageDTO.imagem_cnh?.Replace("\r", "").Replace("\n", "").Trim();
                 if (string.IsNullOrWhiteSpace(base64))
+                {
+                    _logger.LogWarning("Base64 da CNH inválido para motorista {DriverId}", driverId);
                     throw new InvalidOperationException("Imagem CNH inválida.");
+                }
 
                 var commaIndex = base64.IndexOf(',');
                 if (commaIndex >= 0)
                     base64 = base64.Substring(commaIndex + 1);
 
-                byte[] fileBytes = Convert.FromBase64String(base64);
+                var fileBytes = Convert.FromBase64String(base64);
+                string extension = DetermineImageExtension(fileBytes, driverId);
 
-                // Verifica formato
-                string extension = fileBytes.Length switch
-                {
-                    >= 8 when fileBytes.Take(8).SequenceEqual(new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A }) => ".png",
-                    >= 2 when fileBytes.Take(2).SequenceEqual(new byte[] { 0x42, 0x4D }) => ".bmp",
-                    _ => throw new InvalidOperationException("Formato de imagem inválido. Apenas PNG ou BMP são aceitos.")
-                };
-
-                var fileName = $"{driverId ?? Guid.NewGuid().ToString()}{extension}";
+                var fileName = $"{driverId ?? ""}{extension}";
                 var relativePath = await _storagesService.SaveAsync(fileName, fileBytes);
 
-                _logger.LogInformation("Imagem CNH salva no storage em {Path}", relativePath);
-
+                _logger.LogInformation("Imagem CNH salva no storage em {Path} para motorista {DriverId}", relativePath, driverId);
                 return relativePath;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao processar imagem CNH");
+                _logger.LogError(ex, "Erro ao processar imagem CNH para motorista {DriverId}", driverId);
                 throw;
             }
         }
+
+        private string DetermineImageExtension(byte[] fileBytes, string? driverId)
+        {
+            if (fileBytes.Length >= 8 && fileBytes.Take(8).SequenceEqual(new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A }))
+                return ".png";
+            if (fileBytes.Length >= 2 && fileBytes.Take(2).SequenceEqual(new byte[] { 0x42, 0x4D }))
+                return ".bmp";
+
+            _logger.LogWarning("Formato inválido de imagem para motorista {DriverId}", driverId);
+            throw new InvalidOperationException("Formato de imagem inválido. Apenas PNG ou BMP são aceitos.");
+        }
     }
 }
-            

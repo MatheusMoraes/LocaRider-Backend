@@ -2,7 +2,6 @@
 using LocaRider.Domain.Entities.Motorcycles;
 using LocaRider.Domain.Entities.Rental;
 using LocaRider.Domain.Entities.RentalPlan;
-using LocaRider.Domain.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace LocaRider.Infrastructure.Data.Context
@@ -13,7 +12,6 @@ namespace LocaRider.Infrastructure.Data.Context
           : base(options)
         {}
 
-        public DbSet<User> Users { get; set; }
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Motorcycle> Motorcycles{ get; set; }
         public DbSet<Rental> Rentals { get; set; }

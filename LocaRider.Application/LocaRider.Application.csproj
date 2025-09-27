@@ -14,8 +14,4 @@
     <ProjectReference Include="..\LocaRider.Domain\LocaRider.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Interfaces\RentalPlans\" />
-  </ItemGroup>
-
 </Project>
