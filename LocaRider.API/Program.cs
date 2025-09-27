@@ -64,6 +64,16 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddSwaggerExamplesFromAssemblyOf<MotorcyclesObjectExample>();
 builder.Services.AddSwaggerExamplesFromAssemblyOf<MotorcyclesPlateExample>();
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8080); // HTTP
+    options.ListenAnyIP(8081, listenOptions =>
+    {
+        listenOptions.UseHttps(); // HTTPS
+    });
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

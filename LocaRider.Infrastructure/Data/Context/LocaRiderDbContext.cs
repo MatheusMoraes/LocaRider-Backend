@@ -35,7 +35,6 @@ namespace LocaRider.Infrastructure.Data.Context
                .WithMany(e => e.Rentals)
                .HasForeignKey(l => l.DriverId);
 
-            // Relacionamento Moto -> Locacao
             modelBuilder.Entity<Rental>()
                 .HasOne(l => l.Motorcycle)
                 .WithMany(m => m.Rentals)

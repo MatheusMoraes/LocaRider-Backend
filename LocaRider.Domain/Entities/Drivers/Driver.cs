@@ -6,13 +6,13 @@ namespace LocaRider.Domain.Entities.Driver
     {
         [Key]
         public string DriverId { get; set; }
-        public string Name { get; private set; } = string.Empty;
-        public string Cnpj { get; private set; } = string.Empty;
-        public DateTime BirthDate { get; private set; }
-        public string CnhNumber { get; private set; } = string.Empty;
-        public string CnhType { get; private set; } = string.Empty;
-        public string CnhImage { get; private set; } = string.Empty;
-        public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+        public string Name { get;  set; } = string.Empty;
+        public string Cnpj { get;  set; } = string.Empty;
+        public DateTime BirthDate { get;  set; }
+        public string CnhNumber { get;  set; } = string.Empty;
+        public string CnhType { get; set; } = string.Empty;
+        public string CnhImage { get;  set; } = string.Empty;
+        public DateTime CreatedAt { get;  set; } = DateTime.UtcNow;
 
         public ICollection<LocaRider.Domain.Entities.Rental.Rental> Rentals { get; set; } = [];
         public Driver() { }
@@ -25,10 +25,9 @@ namespace LocaRider.Domain.Entities.Driver
             SetCnhType(cnhType);
             SetCnhImage(cnhImage);
 
-            CreatedAt = DateTime.UtcNow; // Garantindo UTC
+            CreatedAt = DateTime.UtcNow;
         }
 
-        // Métodos de negócio para manter invariantes
         public void SetName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))

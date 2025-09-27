@@ -22,7 +22,6 @@ namespace LocaRider.Application.AutoMapper
             .ForCtorParam("cnhImage", opt => opt.MapFrom(src => src.imagem_cnh))
             .AfterMap((src, dest) =>
             {
-                // Mapeia o DriverId/identificador
                 if (!string.IsNullOrWhiteSpace(src.identificador))
                     dest.DriverId = src.identificador;
             })

@@ -76,7 +76,7 @@ namespace LocaRider.Infrastructure.Messaging.Consumers
             );
 
             Console.WriteLine("✅ Consumer iniciado. Aguardando mensagens...");
-            await Task.Delay(-1, cancellationToken); // Mantém rodando
+            await Task.Delay(-1, cancellationToken);
         }
     }
 }

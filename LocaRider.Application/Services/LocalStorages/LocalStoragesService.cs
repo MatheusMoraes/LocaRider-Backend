@@ -12,7 +12,6 @@ namespace LocaRider.Application.Services.LocalStorages
         {
             _logger = logger;
 
-            // Define a pasta "photos" na raiz do projeto
             _basePath = Path.Combine(AppContext.BaseDirectory, "photos");
             _logger.LogInformation("Caminho base para armazenamento local definido: {BasePath}", _basePath);
 
