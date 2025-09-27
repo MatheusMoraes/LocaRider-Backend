@@ -29,7 +29,7 @@ LocaRider é um sistema de gestão de motos, entregadores e locações, utilizan
 ## Como Rodar
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/LocaRider.git
+   git clone https://github.com/MatheusMoraes/LocaRider-Backend.git
    cd LocaRider
    ```
 
