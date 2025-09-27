@@ -9,7 +9,7 @@ LocaRider é um sistema de gestão de motos, entregadores e locações, utilizan
 - Consulta e atualização de dados
 
 ## Tecnologias Utilizadas
-- .NET 10
+- .NET 9
 - EF Core
 - PostgreSQL
 - MongoDB
