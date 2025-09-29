@@ -1,4 +1,5 @@
-﻿# LocaRider API
+﻿
+# LocaRider API
 
 ## Descrição
 LocaRider é um sistema de gestão de motos, entregadores e locações, utilizando Clean Architecture e boas práticas em .NET 10, com persistência em PostgreSQL e MongoDB. A API permite:
